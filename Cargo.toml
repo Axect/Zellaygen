@@ -1,0 +1,12 @@
+[package]
+name = "Zellaygen"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+indoc = "1.0.6"
+serde = "1.0.138"
+serde_derive = "1.0.138"
+toml = "0.5.9"
