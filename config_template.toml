@@ -1,3 +1,7 @@
 [config]
 name = "test"
 dir = "~/path/to/project"
+editor_cmd = "nvim"
+tree_tool = "broot"
+monitor_tool = "btm"
+git_tool = "gitui"

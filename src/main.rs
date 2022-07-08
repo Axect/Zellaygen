@@ -36,27 +36,31 @@ fn main() {
             parts:
               - direction: Horizontal
                 run:
-                  command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && nvim\"] }}
+                  command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && {editor_cmd}\"] }}
                 focus: true
               - direction: Horizontal
                 parts:
                   - direction: Vertical
                     run:
-                      command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && broot\"] }}
+                      command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && {tree}\"] }}
                   - direction: Vertical
                     run:
                       command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && zsh\"] }}
           - name: \"perf\"
             direction: Vertical
             run:
-              command: {{ cmd: btm }}
+              command: {{ cmd: {monitor} }}
           - name: \"git\"
             direction: Vertical
             run:
-              command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && gitui\"] }}
+              command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && {git}\"] }}
         ",
         name = config.get_name(),
         dir = config.get_dir(),
+        editor_cmd = config.get_editor_cmd(),
+        tree = config.get_tree_tool(),
+        monitor = config.get_monitor_tool(),
+        git = config.get_git_tool(),
     };
 
     let yaml_file_name = format!("{}.yaml", config.get_name());
@@ -73,7 +77,11 @@ struct Template {
 #[derive(Debug, Deserialize)]
 struct Config {
     name: String,
-    dir: String
+    dir: String,
+    editor_cmd: String,
+    tree_tool: String,
+    monitor_tool: String,
+    git_tool: String,
 }
 
 impl Template {
@@ -88,5 +96,21 @@ impl Template {
 
     fn get_dir(&self) -> &str {
         &self.config.dir
+    }
+
+    fn get_editor_cmd(&self) -> &str {
+        &self.config.editor_cmd
+    }
+
+    fn get_tree_tool(&self) -> &str {
+        &self.config.tree_tool
+    }
+
+    fn get_monitor_tool(&self) -> &str {
+        &self.config.monitor_tool
+    }
+
+    fn get_git_tool(&self) -> &str {
+        &self.config.git_tool
     }
 }
