@@ -4,7 +4,8 @@ Easy to generate `layout.yaml` for [Zellij](https://zellij.dev)
 
 ## Usage
 
-* Edit `template.toml`
+1. Copy `config_template.toml` to `config.toml`
+* Edit `config.toml`
     * `name` : Name of session & yaml file - `{name}.yaml`
     * `dir` : Directory to your project dir - `~/path/to/project`
     * `editor_cmd` : Editor open dir command (e.g. `nvim`, `code .` and etc.)
@@ -14,7 +15,7 @@ Easy to generate `layout.yaml` for [Zellij](https://zellij.dev)
 
 ## Example
 
-Generated yaml file from default `template.toml` is as follow.
+Generated yaml file from default `config_template.toml` is as follow.
 
 ```yaml
 ---
