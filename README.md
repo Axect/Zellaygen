@@ -7,6 +7,10 @@ Easy to generate `layout.yaml` for [Zellij](https://zellij.dev)
 * Edit `template.toml`
     * `name` : Name of session & yaml file - `{name}.yaml`
     * `dir` : Directory to your project dir - `~/path/to/project`
+    * `editor_cmd` : Editor open dir command (e.g. `nvim`, `code .` and etc.)
+    * `tree_tool` : Tool for file tree view (e.g. `broot`)
+    * `monitor_tool` : Tool for monitor (e.g. `htop`, `btm`, `btop`, `ytop` and etc.)
+    * `git_tool` : Tool for git (e.g. `gitui`)
 
 ## Example
 
