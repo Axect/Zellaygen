@@ -1,12 +1,10 @@
-use serde_derive::Deserialize;
 use std::fs::read_to_string;
 use std::fs;
 use indoc::formatdoc;
+use serde_derive::Deserialize;
 
 fn main() {
-    let config = Template::parse_toml("template.toml");
-    println!("{:?}", config);
-
+    let config = Template::parse_toml("config.toml");
     let yaml = formatdoc! {"
         ---
         session:
@@ -62,8 +60,9 @@ fn main() {
     };
 
     let yaml_file_name = format!("{}.yaml", config.get_name());
-    let yaml_file = fs::File::create(&yaml_file_name).unwrap();
-    fs::write(yaml_file_name, yaml).unwrap();
+    fs::write(&yaml_file_name, yaml).unwrap();
+
+    println!("Generating {} completed!", yaml_file_name);
 }
 
 #[derive(Debug, Deserialize)]
