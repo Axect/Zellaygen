@@ -1,59 +1,49 @@
 use std::fs::read_to_string;
 use std::fs;
+use std::env;
 use indoc::formatdoc;
 use serde_derive::Deserialize;
 
 fn main() {
     let config = Template::parse_toml("config.toml");
-    let yaml = formatdoc! {"
-        ---
-        session:
-          name: \"{name}\"
-          attach: true
-        template:
-          direction: Horizontal
-          parts:
-            - direction: Vertical  # part 1
-              borderless: true
-              split_size:
-                Fixed: 1
-              run:
-                plugin:
-                  location: \"zellij:tab-bar\"
-            - direction: Vertical # part 2
-              body: true
-            - direction: Vertical # part 3
-              borderless: true
-              split_size:
-                Fixed: 2
-              run:
-                plugin:
-                    location: \"zellij:status-bar\"
-        tabs:
-          - name: \"work\"
-            focus: true
-            direction: Vertical
-            parts:
-              - direction: Horizontal
-                run:
-                  command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && {editor_cmd}\"] }}
-                focus: true
-              - direction: Horizontal
-                parts:
-                  - direction: Vertical
-                    run:
-                      command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && {tree}\"] }}
-                  - direction: Vertical
-                    run:
-                      command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && zsh\"] }}
-          - name: \"perf\"
-            direction: Vertical
-            run:
-              command: {{ cmd: {monitor} }}
-          - name: \"git\"
-            direction: Vertical
-            run:
-              command: {{ cmd: zsh, args: [\"-c\", \"cd {dir} && {git}\"] }}
+    let kdl = formatdoc! {"
+        layout {{
+            default_tab_template {{
+                pane size=1 borderless=true {{
+                    plugin location=\"zellij:tab-bar\"
+                }}
+                children
+                pane size=2 borderless=true {{
+                    plugin location=\"zellij:status-bar\"
+                }}
+            }}
+            tab name=\"work\" focus=true split_direction=\"Vertical\" {{
+                pane split_direction=\"Vertical\" {{
+                    pane name=\"editor\" command=\"{shell}\" focus=true {{
+                        args \"-c\" \"cd {dir} && {editor_cmd}\"
+                    }}
+                    pane split_direction=\"Horizontal\" {{
+                        pane name=\"files\" command=\"{shell}\" {{
+                            args \"-c\" \"cd {dir} && {tree}\"
+                        }}
+                        pane name=\"shell\" command=\"{shell}\" {{
+                            args \"-c\" \"cd {dir} && {shell}\"
+                        }}
+                    }}
+                }}
+            }}
+            tab name=\"perf\" {{
+                pane name=\"monitor\" command=\"{monitor}\"
+            }}
+            tab name=\"git\" {{
+                pane name=\"git\" {{
+                    command \"{shell}\"
+                    args \"-c\" \"cd {dir} && {git}\"
+                }}
+            }}
+        }}
+        session_name \"{name}\"
+        attach_to_session true
         ",
         name = config.get_name(),
         dir = config.get_dir(),
@@ -61,12 +51,13 @@ fn main() {
         tree = config.get_tree_tool(),
         monitor = config.get_monitor_tool(),
         git = config.get_git_tool(),
+        shell = env::var("SHELL").unwrap_or_else(|_| "sh".to_string()),
     };
 
-    let yaml_file_name = format!("{}.yaml", config.get_name());
-    fs::write(&yaml_file_name, yaml).unwrap();
+    let kdl_file_name = format!("{}.kdl", config.get_name());
+    fs::write(&kdl_file_name, kdl).unwrap();
 
-    println!("Generating {} completed!", yaml_file_name);
+    println!("Generating {} completed!", kdl_file_name);
 }
 
 #[derive(Debug, Deserialize)]
