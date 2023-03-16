@@ -1,6 +1,6 @@
 # ZelLayGen (Zellij Layout Generator)
 
-Easy to generate `layout.yaml` for [Zellij](https://zellij.dev)
+Easy to generate `layout.kdl` for [Zellij](https://zellij.dev)
 
 ## Usage
 
@@ -15,55 +15,44 @@ Easy to generate `layout.yaml` for [Zellij](https://zellij.dev)
 
 ## Example
 
-Generated yaml file from default `config_template.toml` is as follow.
+Generated kdl file from default `config_template.toml` is as follow.
 
-```yaml
----
-session:
-  name: "test"
-  attach: true
-template:
-  direction: Horizontal
-  parts:
-    - direction: Vertical  # part 1
-      borderless: true
-      split_size:
-        Fixed: 1
-      run:
-        plugin:
-          location: "zellij:tab-bar"
-    - direction: Vertical # part 2
-      body: true
-    - direction: Vertical # part 3
-      borderless: true
-      split_size:
-        Fixed: 2
-      run:
-        plugin:
-            location: "zellij:status-bar"
-tabs:
-  - name: "work"
-    focus: true
-    direction: Vertical
-    parts:
-      - direction: Horizontal
-        run:
-          command: { cmd: zsh, args: ["-c", "cd ~/path/to/project && nvim"] }
-        focus: true
-      - direction: Horizontal
-        parts:
-          - direction: Vertical
-            run:
-              command: { cmd: zsh, args: ["-c", "cd ~/path/to/project && broot"] }
-          - direction: Vertical
-            run:
-              command: { cmd: zsh, args: ["-c", "cd ~/path/to/project && zsh"] }
-  - name: "perf"
-    direction: Vertical
-    run:
-      command: { cmd: btm }
-  - name: "git"
-    direction: Vertical
-    run:
-      command: { cmd: zsh, args: ["-c", "cd ~/path/to/project && gitui"] }
+```kdl
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+    tab name="work" focus=true split_direction="Vertical" {
+        pane split_direction="Vertical" {
+            pane name="editor" command="/usr/bin/zsh" focus=true {
+                args "-c" "cd ~/path/to/project && nvim"
+            }
+            pane split_direction="Horizontal" {
+                pane name="files" command="/usr/bin/zsh" {
+                    args "-c" "cd ~/path/to/project && broot"
+                }
+                pane name="shell" command="/usr/bin/zsh" {
+                    args "-c" "cd ~/path/to/project && /usr/bin/zsh"
+                }
+            }
+        }
+    }
+    tab name="perf" {
+        pane name="monitor" command="btm"
+    }
+    tab name="git" {
+        pane name="git" {
+            command "/usr/bin/zsh"
+            args "-c" "cd ~/path/to/project && gitui"
+        }
+    }
+}
+session_name "test"
+attach_to_session true
 ```
