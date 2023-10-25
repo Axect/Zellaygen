@@ -2,16 +2,26 @@
 
 Easy to generate `layout.kdl` for [Zellij](https://zellij.dev)
 
+## Prerequisites
+
+- Rust
+- Cargo
+
 ## Usage
 
 1. Copy `config_template.toml` to `config.toml`
 2. Edit `config.toml`
-    * `name` : Name of session & yaml file - `{name}.yaml`
-    * `dir` : Directory to your project dir - `~/path/to/project`
-    * `editor_cmd` : Editor open dir command (e.g. `nvim`, `code .` and etc.)
-    * `tree_tool` : Tool for file tree view (e.g. `broot`)
-    * `monitor_tool` : Tool for monitor (e.g. `htop`, `btm`, `btop`, `ytop` and etc.)
-    * `git_tool` : Tool for git (e.g. `gitui`)
+    - `name` : Name of session & yaml file - `{name}.kdl`
+    - `dir` : Directory to your project dir - `~/path/to/project`
+    - `editor_cmd` : Editor open dir command (e.g. `nvim`, `code .` and etc.)
+    - `tree_tool` : Tool for file tree view (e.g. `broot`)
+    - `monitor_tool` : Tool for monitor (e.g. `htop`, `btm`, `btop`, `ytop` and etc.)
+    - `git_tool` : Tool for git (e.g. `gitui`)
+3. Run via Cargo
+    ```sh
+    cargo run --release
+    ```
+4. Check generated `{name}.kdl`
 
 ## Example
 
