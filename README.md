@@ -1,5 +1,9 @@
 # ZelLayGen (Zellij Layout Generator)
 
+<p style="text-align: center;">
+<img src="./zellaygen_1.png">
+</p>
+
 Easy to generate `layout.kdl` for [Zellij](https://zellij.dev)
 
 ## Prerequisites
@@ -11,7 +15,7 @@ Easy to generate `layout.kdl` for [Zellij](https://zellij.dev)
 
 1. Copy `config_template.toml` to `config.toml`
 2. Edit `config.toml`
-    - `name` : Name of session & yaml file - `{name}.kdl`
+    - `name` : Name of session & kdl file - `{name}.kdl`
     - `dir` : Directory to your project dir - `~/path/to/project`
     - `editor_cmd` : Editor open dir command (e.g. `nvim`, `code .` and etc.)
     - `tree_tool` : Tool for file tree view (e.g. `broot`)
@@ -59,7 +63,7 @@ layout {
     tab name="git" {
         pane name="git" {
             command "/usr/bin/zsh"
-            args "-c" "cd ~/path/to/project && gitui"
+            args "-c" "cd ~/path/to/project && lazygit"
         }
     }
 }
